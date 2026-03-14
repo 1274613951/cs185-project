@@ -1,57 +1,787 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Pudding | CS185 Team 15</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0b1020;
+      --panel: rgba(16, 24, 48, 0.72);
+      --panel-strong: rgba(17, 24, 39, 0.92);
+      --text: #eef2ff;
+      --muted: #b8c0e0;
+      --line: rgba(255, 255, 255, 0.12);
+      --accent: #8b5cf6;
+      --accent-2: #22c55e;
+      --accent-3: #38bdf8;
+      --shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+      --radius: 22px;
+      --max: 1180px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(139, 92, 246, 0.22), transparent 35%),
+        radial-gradient(circle at top right, rgba(56, 189, 248, 0.18), transparent 30%),
+        linear-gradient(180deg, #0b1020 0%, #0d1329 50%, #080c18 100%);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    .container {
+      width: min(calc(100% - 32px), var(--max));
+      margin: 0 auto;
+    }
+
+    .nav-wrap {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(16px);
+      background: rgba(8, 12, 24, 0.55);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      min-height: 72px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+    }
+
+    .brand-badge {
+      width: 40px;
+      height: 40px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, var(--accent), var(--accent-3));
+      box-shadow: 0 12px 28px rgba(139, 92, 246, 0.35);
+      font-size: 1rem;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+
+    .nav-links a {
+      color: var(--muted);
+      font-size: 0.95rem;
+      transition: color 0.2s ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--text);
+    }
+
+    .hero {
+      padding: 64px 0 28px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 28px;
+      align-items: stretch;
+    }
+
+    .hero-card,
+    .panel,
+    .deliverable-card,
+    .media-card,
+    .team-card,
+    .task-card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+    }
+
+    .hero-card {
+      padding: 34px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.06);
+      color: #d8def7;
+      font-size: 0.85rem;
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      margin: 0 0 16px;
+      font-size: clamp(2.4rem, 5vw, 4.7rem);
+      line-height: 1.04;
+      letter-spacing: -0.04em;
+    }
+
+    .hero-subtitle {
+      margin: 0 0 16px;
+      font-size: 1.1rem;
+      color: #dce4ff;
+      max-width: 60ch;
+    }
+
+    .hero-description {
+      margin: 0;
+      color: var(--muted);
+      max-width: 62ch;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-height: 48px;
+      padding: 0 18px;
+      border-radius: 14px;
+      font-weight: 700;
+      transition: transform 0.2s ease, opacity 0.2s ease, border-color 0.2s ease;
+    }
+
+    .button:hover {
+      transform: translateY(-2px);
+    }
+
+    .button-primary {
+      background: linear-gradient(135deg, var(--accent), #6d5efc);
+      color: white;
+    }
+
+    .button-secondary {
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .hero-side {
+      display: grid;
+      gap: 18px;
+    }
+
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .stat {
+      padding: 22px;
+    }
+
+    .stat h3 {
+      margin: 0;
+      font-size: 2rem;
+      letter-spacing: -0.04em;
+    }
+
+    .stat p {
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .panel {
+      padding: 28px;
+      margin: 18px 0 0;
+    }
+
+    .section {
+      padding: 28px 0;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .section-title {
+      margin: 0;
+      font-size: clamp(1.6rem, 2.5vw, 2.3rem);
+      letter-spacing: -0.03em;
+    }
+
+    .section-note {
+      margin: 8px 0 0;
+      color: var(--muted);
+      max-width: 70ch;
+    }
+
+    .overview-grid,
+    .team-grid,
+    .task-grid,
+    .media-grid,
+    .deliverables-grid {
+      display: grid;
+      gap: 18px;
+    }
+
+    .overview-grid {
+      grid-template-columns: 1.05fr 0.95fr;
+    }
+
+    .team-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .task-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .media-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .deliverables-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .list {
+      margin: 0;
+      padding-left: 18px;
+      color: var(--muted);
+    }
+
+    .team-card,
+    .task-card,
+    .media-card,
+    .deliverable-card {
+      padding: 24px;
+    }
+
+    .team-role,
+    .task-level,
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.06);
+      color: #d8def7;
+      font-size: 0.82rem;
+      margin-bottom: 12px;
+    }
+
+    .team-card h3,
+    .task-card h3,
+    .media-card h3,
+    .deliverable-card h3 {
+      margin: 0 0 10px;
+      font-size: 1.15rem;
+      letter-spacing: -0.02em;
+    }
+
+    .team-card p,
+    .task-card p,
+    .media-card p,
+    .deliverable-card p,
+    .panel p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .deliverable-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .link-chip {
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: var(--text);
+      font-weight: 600;
+      font-size: 0.92rem;
+    }
+
+    .link-chip:hover {
+      border-color: rgba(255, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .iframe-wrap {
+      margin-top: 16px;
+      border-radius: 18px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: #050814;
+      aspect-ratio: 16 / 9;
+    }
+
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    .deliverable-card.featured {
+      background: linear-gradient(180deg, rgba(34, 197, 94, 0.12), rgba(16, 24, 48, 0.72));
+    }
+
+    .footer {
+      padding: 28px 0 48px;
+    }
+
+    .footer-card {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 18px;
+      padding: 22px 24px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 20px;
+    }
+
+    .footer-card p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    @media (max-width: 980px) {
+      .hero-grid,
+      .overview-grid,
+      .team-grid,
+      .task-grid,
+      .media-grid,
+      .deliverables-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .nav {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 12px 0;
+      }
+
+      .footer-card {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .hero {
+        padding-top: 36px;
+      }
+
+      .hero-card,
+      .panel,
+      .team-card,
+      .task-card,
+      .media-card,
+      .deliverable-card {
+        padding: 20px;
+      }
+
+      .stat-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .nav-links {
+        gap: 12px;
+      }
+    }
+  </style>
 </head>
 <body>
-  <h1>Pudding</h1>
+  <div class="nav-wrap">
+    <div class="container nav">
+      <a class="brand" href="#top">
+        <span class="brand-badge">P</span>
+        <span>Pudding</span>
+      </a>
+      <div class="nav-links">
+        <a href="#overview">Overview</a>
+        <a href="#team">Team</a>
+        <a href="#tasks">Tasks</a>
+        <a href="#media">Prototype</a>
+        <a href="#deliverables">Deliverables</a>
+      </div>
+    </div>
+  </div>
 
-  <p>
-    CS185 W26<br>
-    Team 15
-  </p>
+  <main id="top">
+    <section class="hero">
+      <div class="container hero-grid">
+        <div class="hero-card">
+          <div class="eyebrow">CS185 W26 · Team 15 · Final Website</div>
+          <h1>Pudding</h1>
+          <p class="hero-subtitle">
+            A companion-style focus app that helps students stay motivated without relying on punishment-based productivity tools.
+          </p>
+          <p class="hero-description">
+            Many students struggle to stay focused in distraction-heavy digital environments. Pudding reframes studying as a more supportive and emotionally engaging experience through an anime-inspired virtual companion, lightweight progress feedback, and a friendly focus flow designed for students who feel stressed by traditional study apps.
+          </p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="#deliverables">View Deliverables</a>
+            <a class="button button-secondary" href="#media">See Prototype</a>
+          </div>
+        </div>
 
-  <h2>Deliverables</h2>
-  <ul>
-    <li>
-      GR1: Needfinding —
-      <a href="assets/slides/GR1.pdf" target="_blank">Slides (PDF)</a>
-    </li>
-    <li>
-      GR2: Additional Needfinding, POVs, HMWs, Brainstorming & Experience Prototypes —
-      <a href="assets/slides/GR2.pdf" target="_blank">Slides (PDF)</a>
-    </li>
+        <div class="hero-side">
+          <div class="stat-grid">
+            <div class="hero-card stat">
+              <h3>10</h3>
+              <p>Quarter-long deliverables documented across research, prototyping, evaluation, and final reporting.</p>
+            </div>
+            <div class="hero-card stat">
+              <h3>3</h3>
+              <p>Core study tasks prioritized around starting a session, staying engaged, and completing focused work.</p>
+            </div>
+            <div class="hero-card stat">
+              <h3>Hi-Fi</h3>
+              <p>Interactive final prototype refined through heuristic evaluation and iterative design decisions.</p>
+            </div>
+            <div class="hero-card stat">
+              <h3>Public</h3>
+              <p>Designed to be readable by employers, classmates, and viewers outside UCSB.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-    <li>
-  GR4: Concept Video —
-  <a href="https://www.youtube.com/watch?v=YOUR_ID" target="_blank">YouTube</a>
-  |
-  <a href="assets/video/GR4.mp4" download>Download (MP4)</a>
-  <br><br>
-  <iframe width="100%" height="450"
-    src="https://youtu.be/XmTkSJgKwE8"
-    title="GR4 Concept Video"
-    frameborder="0"
-    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-    allowfullscreen>
-  </iframe>
-  <br><br>
-  <video controls width="100%">
-    <source src="assets/video/GR4.mp4" type="video/mp4">
-  </video>
-</li>
+    <section class="section" id="overview">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <h2 class="section-title">Project Overview</h2>
+            <p class="section-note">
+              Pudding was developed through a full design-thinking process, from needfinding and synthesis to ideation, prototyping, usability testing, and high-fidelity refinement.
+            </p>
+          </div>
+        </div>
 
-    <li>GR5: Sketching, Low-Fi Prototyping & Usability Testing — TBD</li>
-    <li>GR6a: Medium-Fi Prototype — TBD</li>
-    <li>GR6b: High-Fi Prototype — TBD</li>
-    <li>GR7: Heuristic Evaluation — TBD</li>
-    <li>GR8: Poster / Pitch / Demo — TBD</li>
-    <li>GR9: Final Report — TBD</li>
-  </ul>
+        <div class="overview-grid">
+          <div class="panel">
+            <span class="pill">Problem</span>
+            <p>
+              Students often find it difficult to maintain attention while studying. Existing productivity tools typically rely on strict timers, blocking systems, or pressure-heavy workflows that can feel punitive and emotionally draining.
+            </p>
+          </div>
+          <div class="panel">
+            <span class="pill">Solution</span>
+            <p>
+              Pudding explores an alternative model: a virtual companion that motivates users with encouragement, emotional presence, and lightweight progress cues so that studying feels more supportive and less isolating.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
 
-  <p>Website will be updated as milestones are completed.</p>
+    <section class="section" id="team">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <h2 class="section-title">Team & Roles</h2>
+            <p class="section-note">
+              Replace the names and role descriptions below so they exactly match your team submission.
+            </p>
+          </div>
+        </div>
+
+        <div class="team-grid">
+          <div class="team-card">
+            <div class="team-role">Design & Prototype</div>
+            <h3>Yiheng F.</h3>
+            <p>Worked on interface design, website presentation, visual structure, and prototyping support across multiple deliverables.</p>
+          </div>
+          <div class="team-card">
+            <div class="team-role">Research & Synthesis</div>
+            <h3>Tiffany N.</h3>
+            <p>Led user research, interview synthesis, and contributed to framing the design opportunity and design rationale.</p>
+          </div>
+          <div class="team-card">
+            <div class="team-role">Ideation & Evaluation</div>
+            <h3>Andy W.</h3>
+            <p>Supported brainstorming, experience prototyping, and feedback-based iteration throughout the quarter.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="tasks">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <h2 class="section-title">Core User Tasks</h2>
+            <p class="section-note">
+              These tasks connect the final interface back to the user needs identified through interviews and later design evaluation.
+            </p>
+          </div>
+        </div>
+
+        <div class="task-grid">
+          <div class="task-card">
+            <div class="task-level">Easy</div>
+            <h3>Start a Focus Session</h3>
+            <p>Users begin a session quickly with minimal setup. This is the most important entry point because friction at the start makes people abandon productivity tools.</p>
+          </div>
+          <div class="task-card">
+            <div class="task-level">Medium</div>
+            <h3>Stay Motivated During Study</h3>
+            <p>Users receive encouragement and visual feedback from the companion. This supports attention without relying on punishment or overly rigid controls.</p>
+          </div>
+          <div class="task-card">
+            <div class="task-level">Medium</div>
+            <h3>Complete a Session</h3>
+            <p>Users finish a study session and review simple progress feedback. This reinforces positive study habits and gives closure to the workflow.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="media">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <h2 class="section-title">Prototype & Media</h2>
+            <p class="section-note">
+              The rubric asks for playable embedded videos and clear access to prototype links. Replace placeholder URLs below with your real links.
+            </p>
+          </div>
+        </div>
+
+        <div class="media-grid">
+          <div class="media-card">
+            <div class="pill">Embedded Video</div>
+            <h3>GR4 Concept Video</h3>
+            <p>Provide a YouTube or Vimeo embed, plus a direct downloadable file link.</p>
+            <div class="iframe-wrap">
+              <iframe src="https://www.youtube.com/embed/YOUR_GR4_VIDEO_ID" title="GR4 Concept Video" allowfullscreen></iframe>
+            </div>
+            <div class="deliverable-links">
+              <a class="link-chip" href="https://www.youtube.com/watch?v=YOUR_GR4_VIDEO_ID" target="_blank" rel="noopener">YouTube</a>
+              <a class="link-chip" href="assets/video/GR4.mp4" target="_blank" rel="noopener">Download MP4</a>
+              <a class="link-chip" href="assets/slides/GR4.pdf" target="_blank" rel="noopener">Slides PDF</a>
+            </div>
+          </div>
+
+          <div class="media-card">
+            <div class="pill">Prototype</div>
+            <h3>Final High-Fi Figma</h3>
+            <p>Use either a Figma embed or a prominent external prototype link so reviewers can access the interactive flow immediately.</p>
+            <div class="iframe-wrap">
+              <iframe src="https://www.figma.com/embed?embed_host=share&url=YOUR_FIGMA_PROTOTYPE_URL" title="High-Fi Prototype"></iframe>
+            </div>
+            <div class="deliverable-links">
+              <a class="link-chip" href="YOUR_FIGMA_PROTOTYPE_URL" target="_blank" rel="noopener">Open Figma Prototype</a>
+              <a class="link-chip" href="assets/docs/GR8_README.pdf" target="_blank" rel="noopener">README PDF</a>
+            </div>
+          </div>
+
+          <div class="media-card">
+            <div class="pill">Embedded Video</div>
+            <h3>GR9 Demo Video</h3>
+            <p>Show your final demo here, with both streaming and download options available to visitors.</p>
+            <div class="iframe-wrap">
+              <iframe src="https://www.youtube.com/embed/YOUR_GR9_VIDEO_ID" title="GR9 Demo Video" allowfullscreen></iframe>
+            </div>
+            <div class="deliverable-links">
+              <a class="link-chip" href="https://www.youtube.com/watch?v=YOUR_GR9_VIDEO_ID" target="_blank" rel="noopener">YouTube</a>
+              <a class="link-chip" href="assets/video/GR9.mp4" target="_blank" rel="noopener">Download MP4</a>
+              <a class="link-chip" href="assets/slides/GR9.pdf" target="_blank" rel="noopener">Pitch Slides</a>
+            </div>
+          </div>
+
+          <div class="media-card">
+            <div class="pill">Final Report</div>
+            <h3>GR10 Report</h3>
+            <p>Link the final Google Doc in viewer mode and optionally include an exported PDF for easier archiving.</p>
+            <div class="deliverable-links" style="margin-top:18px;">
+              <a class="link-chip" href="YOUR_GR10_GOOGLE_DOC_VIEW_LINK" target="_blank" rel="noopener">Open Google Doc</a>
+              <a class="link-chip" href="assets/docs/GR10_Final_Report.pdf" target="_blank" rel="noopener">Download PDF</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="deliverables">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <h2 class="section-title">Deliverables</h2>
+            <p class="section-note">
+              This section is organized so every required deliverable can be found quickly. Keep links relative whenever the file lives in your GitHub Pages repository.
+            </p>
+          </div>
+        </div>
+
+        <div class="deliverables-grid">
+          <div class="deliverable-card">
+            <div class="pill">GR1</div>
+            <h3>Needfinding</h3>
+            <p>Initial research findings and early presentation materials documenting the team’s first understanding of the problem space.</p>
+            <div class="deliverable-links">
+              <a class="link-chip" href="assets/slides/GR1.pdf" target="_blank" rel="noopener">Slides PDF</a>
+            </div>
+          </div>
+
+          <div class="deliverable-card">
+            <div class="pill">GR2</div>
+            <h3>POVs, HMWs, Brainstorming & Experience Prototypes</h3>
+            <p>Additional needfinding, synthesis outputs, ideation directions, and quick prototypes used to test key assumptions.</p>
+            <div class="deliverable-links">
+              <a class="link-chip" href="assets/slides/GR2.pdf" target="_blank" rel="noopener">Slides PDF</a>
+            </div>
+          </div>
+
+          <div class="deliverable-card featured">
+            <div class="pill">GR3</div>
+            <h3>Project Website</h3>
+            <p>The public-facing project website designed to present the full quarter of work in a clear, professional, and portfolio-friendly format.</p>
+            <div class="deliverable-links">
+              <a class="link-chip" href="index.html" target="_blank" rel="noopener">Current Page</a>
+              <a class="link-chip" href="https://github.com/1274613951/cs185-project" target="_blank" rel="noopener">GitHub Repo</a>
+            </div>
+          </div>
+
+          <div class="deliverable-card">
+            <div class="pill">GR4</div>
+            <h3>Concept Video</h3>
+            <p>Introduces the initial concept and communicates the intended user problem and design direction.</p>
+            <div class="deliverable-links">
+              <a class="link-chip" href="assets/slides/GR4.pdf" target="_blank" rel="noopener">Slides PDF</a>
+              <a class="link-chip" href="https://www.youtube.com/watch?v=YOUR_GR4_VIDEO_ID" target="_blank" rel="noopener">YouTube</a>
+              <a class="link-chip" href="assets/video/GR4.mp4" target="_blank" rel="noopener">Download MP4</a>
+            </div>
+          </div>
+
+          <div class="deliverable-card">
+            <div class="pill">GR5</div>
+            <h3>Sketching, Low-Fi Prototype & Usability Testing</h3>
+            <p>Documents sketch exploration, low-fidelity prototypes, and what the team learned from early usability sessions.</p>
+            <div class="deliverable-links">
+              <a class="link-chip" href="assets/slides/GR5.pdf" target="_blank" rel="noopener">Slides PDF</a>
+            </div>
+          </div>
+
+          <div class="deliverable-card">
+            <div class="pill">GR6</div>
+            <h3>Interactive Medium-Fi Prototype</h3>
+            <p>Shows the medium-fidelity prototype, supporting slides, Figma access, and the accompanying README.</p>
+            <div class="deliverable-links">
+              <a class="link-chip" href="assets/slides/GR6.pdf" target="_blank" rel="noopener">Slides PDF</a>
+              <a class="link-chip" href="YOUR_GR6_FIGMA_LINK" target="_blank" rel="noopener">Figma Link</a>
+              <a class="link-chip" href="assets/docs/GR6_README.pdf" target="_blank" rel="noopener">README PDF</a>
+            </div>
+          </div>
+
+          <div class="deliverable-card">
+            <div class="pill">GR7</div>
+            <h3>Heuristic Evaluation</h3>
+            <p>Includes the evaluation spreadsheet in viewer mode and any synthesis artifact you want to expose on the site.</p>
+            <div class="deliverable-links">
+              <a class="link-chip" href="YOUR_GR7_SPREADSHEET_VIEW_LINK" target="_blank" rel="noopener">Spreadsheet</a>
+              <a class="link-chip" href="assets/docs/GR7_Synthesis.pdf" target="_blank" rel="noopener">Synthesis PDF</a>
+            </div>
+          </div>
+
+          <div class="deliverable-card">
+            <div class="pill">GR8</div>
+            <h3>Interactive High-Fi Prototype</h3>
+            <p>Final polished interactive prototype with supporting slides and documentation.</p>
+            <div class="deliverable-links">
+              <a class="link-chip" href="assets/slides/GR8.pdf" target="_blank" rel="noopener">Slides PDF</a>
+              <a class="link-chip" href="YOUR_GR8_FIGMA_LINK" target="_blank" rel="noopener">Prototype Link</a>
+              <a class="link-chip" href="assets/docs/GR8_README.pdf" target="_blank" rel="noopener">README PDF</a>
+            </div>
+          </div>
+
+          <div class="deliverable-card">
+            <div class="pill">GR9</div>
+            <h3>Poster, Pitch & Demo</h3>
+            <p>Presents the final polished pitch materials, poster, and demo video used to communicate the project outcome.</p>
+            <div class="deliverable-links">
+              <a class="link-chip" href="assets/slides/GR9.pdf" target="_blank" rel="noopener">Slides PDF</a>
+              <a class="link-chip" href="assets/poster/GR9_Poster.pdf" target="_blank" rel="noopener">Poster PDF</a>
+              <a class="link-chip" href="https://www.youtube.com/watch?v=YOUR_GR9_VIDEO_ID" target="_blank" rel="noopener">Demo Video</a>
+              <a class="link-chip" href="assets/video/GR9.mp4" target="_blank" rel="noopener">Download MP4</a>
+            </div>
+          </div>
+
+          <div class="deliverable-card">
+            <div class="pill">GR10</div>
+            <h3>Final Report</h3>
+            <p>A cumulative written report documenting the quarter-long process, design evolution, prototype rationale, and reflection.</p>
+            <div class="deliverable-links">
+              <a class="link-chip" href="YOUR_GR10_GOOGLE_DOC_VIEW_LINK" target="_blank" rel="noopener">Google Doc</a>
+              <a class="link-chip" href="assets/docs/GR10_Final_Report.pdf" target="_blank" rel="noopener">PDF</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-card">
+        <div>
+          <strong>Pudding · CS185 W26</strong>
+          <p>Built for GitHub Pages with relative file links and a portfolio-style layout.</p>
+        </div>
+        <a class="button button-secondary" href="#top">Back to top</a>
+      </div>
+    </div>
+  </footer>
 </body>
 </html>
-
